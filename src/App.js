@@ -11,6 +11,7 @@ import { API } from 'aws-amplify'
 
 import './App.css';
 
+
 const App = () => {
 
   // Create additional state to hold user input for limit and start properties
@@ -27,8 +28,14 @@ const App = () => {
   // Create coins variable and set to empty array
   const [coins, updateCoins] = useState([]);
 
+  // instead of: let loading = true;
+  const [loading, setLoading] = useState(true);
+
   // Define function to all API
   const fetchCoins = async () => {
+
+    setLoading(true);
+
     const { limit, start } = input;
     const data = await API.get(
       'cryptoapi22s'
@@ -36,6 +43,9 @@ const App = () => {
     );
 
     updateCoins(data.coins)
+
+    setLoading = (false);
+
   };
 
   // Call fetchCoins function when component loads
@@ -49,36 +59,44 @@ const App = () => {
   return (
     <div className="App">
 
-    <input
-      onChange={e => updateInputValues('limit', e.target.value)}
-      placeholder="Enter a limit"
-    />
+      {loading &&  <h2>Loading...</h2>}
 
-    <input
-      placeholder="Enter a start value"
-      onChange={e => updateInputValues('start', e.target.value)}
-    />
+    {!loading && 
+    
+    <div>
+      <input
+        onChange={e => updateInputValues('limit', e.target.value)}
+        placeholder="Enter a limit"
+      />
 
-    <button 
-      onClick={fetchCoins}
-    >
-      Fetch Coins
-    </button>
+      <input
+        placeholder="Enter a start value"
+        onChange={e => updateInputValues('start', e.target.value)}
+      />
 
-      {
-        coins.map((coin) => (
-          <div 
-            key={coin.name}
-          >
-            <h2>
-              {coin.name} - {coin.symbol}
-            </h2>
-            <h5>
-              ${coin.price_usd}
-            </h5>
-          </div>
-        ))
-      }
+      <button 
+        onClick={fetchCoins}
+      >
+        Fetch Coins
+      </button>
+
+        {
+          coins.map((coin) => (
+            <div 
+              key={coin.name}
+            >
+              <h2>
+                {coin.name} - {coin.symbol}
+              </h2>
+              <h5>
+                ${coin.price_usd}
+              </h5>
+            </div>
+          ))
+        }
+
+    </div>
+  }
     </div>
   );
 }
