@@ -44,7 +44,7 @@ const App = () => {
 
     updateCoins(data.coins)
 
-    setLoading = (false);
+    setLoading(false);
 
   };
 
@@ -96,7 +96,7 @@ const App = () => {
         }
 
     </div>
-  }
+    }
     </div>
   );
 }
